@@ -7,6 +7,10 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  webpack: (config) => {
+    config.externals.push({ encoding: 'encoding' });
+    return config;
+  },
 };
 
 module.exports = nextConfig;
