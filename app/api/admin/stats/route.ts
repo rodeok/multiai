@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { adminAuthOptions } from '@/lib/admin-auth';
 import clientPromise from '@/lib/mongodb';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(adminAuthOptions);
@@ -33,27 +35,27 @@ export async function GET(request: NextRequest) {
       db.collection('chat_sessions').countDocuments(),
       db.collection('chat_sessions').countDocuments({ createdAt: { $lt: yesterday } }),
       db.collection('ai_models').countDocuments({ status: 'active' }),
-      db.collection('users').countDocuments({ 
-        createdAt: { $gte: yesterday } 
+      db.collection('users').countDocuments({
+        createdAt: { $gte: yesterday }
       }),
-      db.collection('users').countDocuments({ 
-        createdAt: { 
+      db.collection('users').countDocuments({
+        createdAt: {
           $gte: new Date(yesterday.getTime() - 24 * 60 * 60 * 1000),
-          $lt: yesterday 
-        } 
+          $lt: yesterday
+        }
       })
     ]);
 
     // Calculate growth percentages
-    const userGrowth = usersYesterday > 0 
+    const userGrowth = usersYesterday > 0
       ? ((totalUsers - usersYesterday) / usersYesterday * 100).toFixed(1)
       : '0';
 
-    const sessionGrowth = sessionsYesterday > 0 
+    const sessionGrowth = sessionsYesterday > 0
       ? ((totalSessions - sessionsYesterday) / sessionsYesterday * 100).toFixed(1)
       : '0';
 
-    const signupGrowth = newSignupsYesterday > 0 
+    const signupGrowth = newSignupsYesterday > 0
       ? ((newSignupsToday - newSignupsYesterday) / newSignupsYesterday * 100).toFixed(1)
       : '0';
 
