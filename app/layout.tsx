@@ -5,6 +5,8 @@ import { Providers } from './providers';
 import { getSystemSettings } from '@/app/actions/admin';
 import { MaintenanceAlert } from '@/components/chat/MaintenanceAlert';
 
+export const dynamic = 'force-dynamic';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

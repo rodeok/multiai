@@ -176,26 +176,50 @@ export async function getAnalyticsData() {
 }
 
 export async function getActiveModels() {
-    const client = await clientPromise;
-    const db = client.db();
+    try {
+        const client = await clientPromise;
+        const db = client.db();
 
-    const models = await db.collection('models').find({ status: 'active' }).toArray();
+        const models = await db.collection('models').find({ status: 'active' }).toArray();
 
-    return models.map(model => ({
-        ...model,
-        id: model._id.toString(),
-        _id: model._id.toString(),
-    })) as unknown as AIModel[];
+        return models.map(model => ({
+            ...model,
+            id: model._id.toString(),
+            _id: model._id.toString(),
+        })) as unknown as AIModel[];
+    } catch (error) {
+        console.error('Failed to fetch active models:', error);
+        return [];
+    }
 }
 
 export async function getSystemSettings() {
-    const client = await clientPromise;
-    const db = client.db();
+    try {
+        const client = await clientPromise;
+        const db = client.db();
 
-    const settings = await db.collection('settings').findOne({ type: 'global' });
+        const settings = await db.collection('settings').findOne({ type: 'global' });
 
-    if (!settings) {
-        // Return default settings if none exist
+        if (!settings) {
+            // Return default settings if none exist
+            return {
+                siteName: 'NexusChat',
+                supportEmail: 'support@nexuschat.ai',
+                maintenanceMode: false,
+                registrationEnabled: true,
+                sessionDuration: 24,
+                maxLoginAttempts: 5,
+                defaultModel: 'GPT-4 Turbo',
+                temperature: 0.7,
+                systemPrompt: 'You are NexusChat, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
+            };
+        }
+
+        const { _id, type, ...rest } = settings;
+        return rest;
+    } catch (error) {
+        console.error('Failed to fetch system settings:', error);
+        // Fallback to defaults if DB connection fails (e.g. during build)
         return {
             siteName: 'NexusChat',
             supportEmail: 'support@nexuschat.ai',
@@ -208,9 +232,6 @@ export async function getSystemSettings() {
             systemPrompt: 'You are NexusChat, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
         };
     }
-
-    const { _id, type, ...rest } = settings;
-    return rest;
 }
 
 export async function updateSystemSettings(settings: any) {
