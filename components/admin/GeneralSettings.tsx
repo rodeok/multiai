@@ -55,6 +55,24 @@ export function GeneralSettings() {
                         className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
                     />
                 </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Pro Price (NGN)</label>
+                    <input
+                        type="number"
+                        value={settings.proPriceNgn}
+                        onChange={(e) => setSettings({ ...settings, proPriceNgn: Number(e.target.value) })}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Pro Price (USD)</label>
+                    <input
+                        type="number"
+                        value={settings.proPriceUsd}
+                        onChange={(e) => setSettings({ ...settings, proPriceUsd: Number(e.target.value) })}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
+                    />
+                </div>
             </div>
 
             <div className="flex items-center justify-between p-6 bg-blue-500/5 rounded-[2rem] border border-blue-500/10">

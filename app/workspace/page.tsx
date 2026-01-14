@@ -7,7 +7,7 @@ import { getActiveModels } from '@/app/actions/admin';
 import { AIModel } from '@/types';
 
 export default function Workspace() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   const [models, setModels] = useState<AIModel[]>([]);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
@@ -20,6 +20,16 @@ export default function Workspace() {
       router.push('/auth/signin');
     }
   }, [status, router]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('upgraded') === 'success' && update) {
+      update();
+      // Remove params from URL
+      window.history.replaceState({}, '', window.location.pathname);
+      alert('Upgrade successful! You are now a PRO user.');
+    }
+  }, [session, update]);
 
   useEffect(() => {
     async function fetchModels() {
@@ -54,6 +64,9 @@ export default function Workspace() {
     return matchesProvider && matchesSearch;
   });
 
+  const userSubscription = (session?.user as any)?.subscription || 'free';
+  const modelLimit = userSubscription === 'pro' ? 5 : 3;
+
   const toggleModelSelection = (modelId: string) => {
     const model = models.find(m => m.id === modelId);
     if (model?.status === 'inactive') return;
@@ -61,9 +74,7 @@ export default function Workspace() {
     setSelectedModels(prev => {
       if (prev.includes(modelId)) {
         return prev.filter(id => id !== modelId);
-      } else if (prev.length < 2) { // Allow starting compare with 2, but up to 3
-        return [...prev, modelId];
-      } else if (prev.length < 3) {
+      } else if (prev.length < modelLimit) {
         return [...prev, modelId];
       }
       return prev;
@@ -131,10 +142,19 @@ export default function Workspace() {
               </svg>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="flex flex-col items-end hidden sm:flex">
+                <span className="text-white text-sm font-bold">{session.user?.name || 'User'}</span>
+                {userSubscription === 'pro' && (
+                  <span className="text-[10px] bg-gradient-to-r from-amber-400 to-orange-500 text-white px-1.5 py-0.5 rounded font-black tracking-widest leading-none">PRO</span>
+                )}
+              </div>
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 relative">
                 <span className="text-white text-xs sm:text-sm font-medium">
                   {session.user?.name?.[0] || session.user?.email?.[0] || 'U'}
                 </span>
+                {userSubscription === 'pro' && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-slate-800"></div>
+                )}
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
@@ -149,11 +169,21 @@ export default function Workspace() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Configure Workspace</h1>
-          <p className="text-gray-400 text-base sm:text-lg">
-            Select two or more models to compare responses in real-time.
-          </p>
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Configure Workspace</h1>
+            <p className="text-gray-400 text-base sm:text-lg">
+              Select {userSubscription === 'pro' ? 'up to 5' : 'up to 3'} models to compare responses in real-time.
+            </p>
+          </div>
+          {userSubscription === 'free' && (
+            <button
+              onClick={() => router.push('/upgrade')}
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-bold text-sm shadow-lg shadow-amber-500/20 hover:scale-105 transition-transform"
+            >
+              Upgrade to Pro (5 Models)
+            </button>
+          )}
         </div>
 
         {/* Filters */}
@@ -182,7 +212,7 @@ export default function Workspace() {
           {filteredModels.map(model => {
             const isSelected = selectedModels.includes(model.id);
             const isInactive = model.status === 'inactive';
-            const canSelect = !isInactive && (selectedModels.length < 3 || isSelected);
+            const canSelect = !isInactive && (selectedModels.length < modelLimit || isSelected);
 
             return (
               <div

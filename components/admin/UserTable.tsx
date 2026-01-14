@@ -61,6 +61,7 @@ export function UserTable({ users }: UserTableProps) {
                         <TableRow className="border-white/5 hover:bg-transparent px-4">
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14 pl-8">User Profile</TableHead>
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Email Address</TableHead>
+                            <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Plan</TableHead>
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Status</TableHead>
                             <TableHead className="text-right text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14 pr-8">Actions</TableHead>
                         </TableRow>
@@ -85,6 +86,13 @@ export function UserTable({ users }: UserTableProps) {
                                 </TableCell>
                                 <TableCell className="text-slate-300 text-sm font-medium">{user.email}</TableCell>
                                 <TableCell>
+                                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${user.subscription === 'pro'
+                                        ? 'text-blue-400 bg-blue-400/10 border-blue-400/20'
+                                        : 'text-slate-400 bg-slate-400/10 border-slate-400/20'}`}>
+                                        {user.subscription?.toUpperCase() || 'FREE'}
+                                    </span>
+                                </TableCell>
+                                <TableCell>
                                     {user.isBanned ? (
                                         <div className="inline-flex items-center gap-1.5 text-[10px] font-bold text-red-400 bg-red-400/10 px-2.5 py-1 rounded-full border border-red-400/20">
                                             <span>BANNED</span>
@@ -101,8 +109,8 @@ export function UserTable({ users }: UserTableProps) {
                                             disabled={loading === user.id}
                                             onClick={() => handleBanToggle(user.id, user.isBanned)}
                                             className={`p-2 rounded-xl transition-all active:scale-90 ${user.isBanned
-                                                    ? 'bg-green-500/10 text-green-400 hover:bg-green-500'
-                                                    : 'bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500'
+                                                ? 'bg-green-500/10 text-green-400 hover:bg-green-500'
+                                                : 'bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500'
                                                 } hover:text-white`}
                                         >
                                             {user.isBanned ? <FaCheck className="w-3.5 h-3.5" /> : <FaBan className="w-3.5 h-3.5" />}

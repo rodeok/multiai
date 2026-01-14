@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
       email,
       password: hashedPassword,
       name: name || email.split('@')[0],
+      subscription: 'free',
       createdAt: new Date(),
     });
 

@@ -8,7 +8,8 @@ import {
     HiDatabase,
     HiCog,
     HiOutlineLogout,
-    HiShieldCheck
+    HiShieldCheck,
+    HiTicket
 } from 'react-icons/hi';
 import { signOut } from 'next-auth/react';
 
@@ -16,6 +17,7 @@ const menuItems = [
     { name: 'Overview', icon: HiChartBar, href: '/admin/dashboard' },
     { name: 'Users', icon: HiUsers, href: '/admin/users' },
     { name: 'AI Models', icon: HiDatabase, href: '/admin/models' },
+    { name: 'Coupons', icon: HiTicket, href: '/admin/coupons' },
     { name: 'Settings', icon: HiCog, href: '/admin/settings' },
 ];
 

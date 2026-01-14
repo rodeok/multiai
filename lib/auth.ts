@@ -46,6 +46,8 @@ export const authOptions: NextAuthOptions = {
             id: user._id.toString(),
             email: user.email,
             name: user.name,
+            role: user.role,
+            subscription: user.subscription || 'free',
           };
         } catch (error: any) {
           console.error('Auth error in authorize callback:', error);
@@ -90,6 +92,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as any).role;
+        token.subscription = (user as any).subscription || 'free';
       }
       return token;
     },
@@ -97,6 +100,7 @@ export const authOptions: NextAuthOptions = {
       if (token && session.user) {
         (session.user as any).id = token.sub;
         (session.user as any).role = token.role;
+        (session.user as any).subscription = token.subscription;
       }
       return session;
     },

@@ -211,7 +211,9 @@ export async function getSystemSettings() {
                 maxLoginAttempts: 5,
                 defaultModel: 'GPT-4 Turbo',
                 temperature: 0.7,
-                systemPrompt: 'You are Multiai, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
+                systemPrompt: 'You are Multiai, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...',
+                proPriceNgn: 4000,
+                proPriceUsd: 5
             };
         }
 
@@ -229,7 +231,9 @@ export async function getSystemSettings() {
             maxLoginAttempts: 5,
             defaultModel: 'GPT-4 Turbo',
             temperature: 0.7,
-            systemPrompt: 'You are Multiai, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
+            systemPrompt: 'You are Multiai, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...',
+            proPriceNgn: 4000,
+            proPriceUsd: 5
         };
     }
 }

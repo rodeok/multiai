@@ -10,11 +10,13 @@ declare module "next-auth" {
             /** The user's postal address. */
             id: string
             role?: string
+            subscription?: 'free' | 'pro'
         } & DefaultSession["user"]
     }
 
     interface User {
         role?: string
+        subscription?: 'free' | 'pro'
     }
 }
 
@@ -22,5 +24,6 @@ declare module "next-auth/jwt" {
     /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
     interface JWT {
         role?: string
+        subscription?: 'free' | 'pro'
     }
 }
