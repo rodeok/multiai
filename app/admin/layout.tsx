@@ -2,7 +2,7 @@
 
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function AdminLayout({
@@ -12,12 +12,14 @@ export default function AdminLayout({
 }) {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const pathname = usePathname();
+    const isAuthPage = pathname === '/admin/auth';
 
     useEffect(() => {
-        if (status === 'unauthenticated') {
+        if (status === 'unauthenticated' && !isAuthPage) {
             router.push('/admin/auth');
         }
-    }, [status, router]);
+    }, [status, router, isAuthPage]);
 
     if (status === 'loading') {
         return (
@@ -25,6 +27,10 @@ export default function AdminLayout({
                 <div className="text-white">Loading...</div>
             </div>
         );
+    }
+
+    if (isAuthPage) {
+        return <>{children}</>;
     }
 
     if (!session) return null;
