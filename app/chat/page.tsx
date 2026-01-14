@@ -8,7 +8,7 @@ import { getChatMessages, createChatSession, getChatSession } from '@/app/action
 import { MarkdownContent } from '@/components/chat/MarkdownContent';
 import { ChatHistorySidebar } from '@/components/chat/ChatHistorySidebar';
 import { AIModel, ChatSession } from '@/types';
-import { FaThumbsUp, FaThumbsDown, FaCopy, FaRedo } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown, FaCopy, FaRedo, FaRegComment } from 'react-icons/fa';
 import { HiPaperClip, HiMicrophone, HiCog } from 'react-icons/hi';
 
 interface ModelResponse {
@@ -38,6 +38,7 @@ export default function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingModels, setLoadingModels] = useState(true);
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
+  const [showSidebar, setShowSidebar] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -198,46 +199,48 @@ export default function Chat() {
       {/* Header */}
       <header className="border-b border-slate-700 bg-slate-800/50 backdrop-blur-xl">
         <div className="max-w-full px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+          <div className="flex items-center gap-3 sm:gap-6 overflow-hidden">
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+              <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center flex-shrink-0">
                 <div className="w-4 h-4 bg-white rounded-sm"></div>
               </div>
-              <span className="text-xl font-bold text-white">Multi-Model AI</span>
+              <span className="text-lg sm:text-xl font-bold text-white whitespace-nowrap hidden sm:inline">NexusChat</span>
             </div>
 
+            <button
+              onClick={() => setShowSidebar(!showSidebar)}
+              className="md:hidden p-2 text-gray-400 hover:text-white transition-colors"
+            >
+              <FaRegComment className="w-5 h-5" />
+            </button>
+
             {/* Active Models */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
               {selectedModels.map(id => models.find(m => m.id === id)).filter(Boolean).map(model => (
-                <div key={model?.id} className="flex items-center gap-2 px-3 py-1 bg-green-500/20 rounded-full">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-green-400 text-sm font-medium">{model?.displayName}</span>
+                <div key={model?.id} className="flex items-center gap-1.5 px-2.5 py-0.5 bg-green-500/20 rounded-full flex-shrink-0">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                  <span className="text-green-400 text-[10px] sm:text-xs font-medium whitespace-nowrap">{model?.displayName.split(' ')[0]}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="text-gray-300 hover:text-white transition-colors">History</button>
-            <button className="text-gray-300 hover:text-white transition-colors">Gallery</button>
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => router.push('/workspace')}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium transition-colors"
+              className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap"
             >
-              Manage Models
+              Models
             </button>
-            <button className="text-gray-300 hover:text-white transition-colors">
-              <HiCog className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-[10px] sm:text-sm font-medium">
                   {session.user?.name?.[0] || session.user?.email?.[0] || 'U'}
                 </span>
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-gray-400 hover:text-white text-sm transition-colors"
+                className="text-gray-400 hover:text-white text-[10px] sm:text-sm transition-colors whitespace-nowrap hidden xs:block"
               >
                 Logout
               </button>
@@ -247,14 +250,14 @@ export default function Chat() {
       </header>
 
       {/* Chat Area */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar */}
-        <ChatHistorySidebar />
+        <ChatHistorySidebar isOpen={showSidebar} onClose={() => setShowSidebar(false)} />
 
         {/* Main Chat */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col w-full min-w-0">
           {/* Messages */}
-          <div className="flex-1 overflow-auto p-6">
+          <div className="flex-1 overflow-auto p-4 sm:p-6">
             {chatHistory.length === 0 ? (
               <div className="h-full flex items-center justify-center">
                 <div className="text-center text-gray-400">
@@ -281,9 +284,9 @@ export default function Chat() {
                       </div>
                     ) : (
                       /* Model Responses */
-                      <div className={`grid gap-6 ${selectedModels.length === 1 ? 'grid-cols-1' :
-                        selectedModels.length === 2 ? 'grid-cols-2' :
-                          'grid-cols-3'
+                      <div className={`grid gap-4 sm:gap-6 ${selectedModels.length === 1 ? 'grid-cols-1' :
+                        selectedModels.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
+                          'grid-cols-1 lg:grid-cols-3 md:grid-cols-2'
                         }`}>
                         {chat.responses?.map((response, responseIndex) => {
                           const model = models.find(m => m.id === response.modelId);
@@ -341,15 +344,14 @@ export default function Chat() {
                     )}
                   </div>
                 ))}
-                <div ref={messagesEndRef} />
               </div>
             )}
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-slate-700 bg-slate-800/50 p-6">
+          <div className="border-t border-slate-700 bg-slate-800/50 p-4 sm:p-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-end gap-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 sm:gap-4">
                 <div className="flex-1 relative">
                   <textarea
                     value={message}
@@ -360,34 +362,31 @@ export default function Chat() {
                         sendMessage();
                       }
                     }}
-                    placeholder="Send a message to all active models..."
-                    className="w-full px-4 py-3 pr-24 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                    rows={message.split('\n').length}
+                    placeholder="Ask all models..."
+                    className="w-full px-4 py-3 pr-24 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm sm:text-base min-h-[48px] max-h-40 overflow-y-auto"
+                    rows={Math.min(message.split('\n').length, 5)}
                     disabled={isLoading}
                   />
-                  <div className="absolute right-3 bottom-3 flex items-center gap-2">
-                    <button className="p-2 text-gray-400 hover:text-white transition-colors">
+                  <div className="absolute right-2 bottom-2 pr-1 pb-1 flex items-center gap-1 sm:gap-2">
+                    <button className="p-2 text-gray-400 hover:text-white transition-colors hidden sm:block">
                       <HiPaperClip className="w-4 h-4" />
                     </button>
                     <button className="p-2 text-gray-400 hover:text-white transition-colors">
                       <HiMicrophone className="w-4 h-4" />
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-white transition-colors">
-                      <HiCog className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="text-xs text-gray-400">
-                    {selectedModels.length} MODELS ACTIVE
+                <div className="flex items-center justify-between sm:justify-start gap-3">
+                  <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-black">
+                    {selectedModels.length} MODELS
                   </div>
                   <button
                     onClick={sendMessage}
                     disabled={!message.trim() || isLoading}
-                    className="px-6 py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                    className="flex-1 sm:flex-none px-4 sm:px-6 py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white rounded-lg font-bold transition-all transform active:scale-95 flex items-center justify-center gap-2 text-xs sm:text-sm lg:text-base shadow-lg shadow-blue-500/20"
                   >
-                    {isLoading ? 'Thinking...' : 'Send Prompt'}
+                    {isLoading ? 'Thinking...' : 'Send'}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>

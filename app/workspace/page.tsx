@@ -99,43 +99,41 @@ export default function Workspace() {
       {/* Header */}
       <header className="border-b border-slate-700 bg-slate-800/50 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center flex-shrink-0">
                 <div className="w-4 h-4 bg-white rounded-sm"></div>
               </div>
-              <span className="text-xl font-bold text-white">NexusChat</span>
+              <span className="text-lg sm:text-xl font-bold text-white whitespace-nowrap">NexusChat</span>
             </div>
-            <nav className="flex items-center gap-6 text-gray-300">
+            <nav className="hidden md:flex items-center gap-6 text-gray-300">
               <button className="text-blue-400 font-medium">Explore Models</button>
               <button className="hover:text-white transition-colors">Chat History</button>
-              {/* <button className="hover:text-white transition-colors">API Keys</button> */}
-              {/* <button className="hover:text-white transition-colors">Settings</button> */}
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="relative hidden sm:block">
               <input
                 type="text"
                 placeholder="Search models..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-64 px-4 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-40 md:w-64 px-4 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
               <svg className="absolute right-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-xs sm:text-sm font-medium">
                   {session.user?.name?.[0] || session.user?.email?.[0] || 'U'}
                 </span>
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-gray-400 hover:text-white text-sm transition-colors"
+                className="text-gray-400 hover:text-white text-xs sm:text-sm transition-colors whitespace-nowrap"
               >
                 Logout
               </button>
@@ -146,29 +144,28 @@ export default function Workspace() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-3">Configure Workspace</h1>
-          <p className="text-gray-400 text-lg">
-            Select two or more models to compare responses in real-time. Use the filters
-            to find specific providers or capabilities.
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Configure Workspace</h1>
+          <p className="text-gray-400 text-base sm:text-lg">
+            Select two or more models to compare responses in real-time.
           </p>
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-2 sm:gap-4 mb-8 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
           {providers.map(provider => (
             <button
               key={provider}
               onClick={() => setFilterProvider(provider)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filterProvider === provider
+              className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${filterProvider === provider
                 ? 'bg-blue-500 text-white'
                 : 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:text-white'
                 }`}
             >
-              {provider === 'All Providers' ? '📊 All Providers' : `${getProviderIcon(provider)} ${provider}`}
+              {provider === 'All Providers' ? '📊 All' : `${getProviderIcon(provider)} ${provider}`}
             </button>
           ))}
-          <div className="ml-auto">
+          <div className="ml-auto hidden sm:block">
             <button className="px-4 py-2 bg-slate-700 text-gray-300 rounded-md text-sm font-medium hover:bg-slate-600 transition-colors">
               Advanced ▼
             </button>
@@ -176,7 +173,7 @@ export default function Workspace() {
         </div>
 
         {/* Model Grid */}
-        <div className="grid grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-24">
           {filteredModels.map(model => {
             const isSelected = selectedModels.includes(model.id);
             const canSelect = selectedModels.length < 3 || isSelected;
@@ -243,42 +240,42 @@ export default function Workspace() {
 
         {/* Bottom Bar */}
         {selectedModels.length > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-6">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex -space-x-2">
+          <div className="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 p-4 sm:p-6 shadow-2xl z-50">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className="flex -space-x-2 flex-shrink-0">
                   {selectedModels.map(modelId => {
                     const model = models.find(m => m.id === modelId);
                     return (
                       <div
                         key={modelId}
-                        className={`w-10 h-10 ${model ? getProviderColor(model.provider) : 'bg-gray-600'} rounded-full border-2 border-slate-800 flex items-center justify-center`}
+                        className={`w-8 h-8 sm:w-10 sm:h-10 ${model ? getProviderColor(model.provider) : 'bg-gray-600'} rounded-full border-2 border-slate-800 flex items-center justify-center`}
                       >
-                        <span className="text-white text-sm">
+                        <span className="text-white text-xs sm:text-sm">
                           {model ? getProviderIcon(model.provider) : '?'}
                         </span>
                       </div>
                     );
                   })}
                 </div>
-                <div className="text-white">
-                  <div className="font-medium">{selectedModels.length} Models Selected</div>
-                  <div className="text-sm text-gray-400">
+                <div className="text-white truncate">
+                  <div className="font-medium text-sm sm:text-base">{selectedModels.length} Models Selected</div>
+                  <div className="text-xs sm:text-sm text-gray-400 truncate max-w-[200px] sm:max-w-none">
                     {selectedModels.map(id => models.find(m => m.id === id)?.displayName).join(', ')}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
                 <button
                   onClick={() => setSelectedModels([])}
-                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                  className="flex-1 sm:flex-none px-4 py-2 text-gray-300 hover:text-white transition-colors text-sm"
                 >
-                  Clear Selection
+                  Clear
                 </button>
                 <button
                   onClick={startChatting}
-                  className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-medium flex items-center gap-2 transition-colors"
+                  className="flex-[2] sm:flex-none px-6 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-medium flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
                 >
                   Start Comparing
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

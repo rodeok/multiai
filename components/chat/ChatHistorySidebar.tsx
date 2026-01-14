@@ -12,7 +12,7 @@ interface ChatSession {
     updatedAt: Date;
 }
 
-export function ChatHistorySidebar() {
+export function ChatHistorySidebar({ isOpen, onClose }: { isOpen?: boolean, onClose?: () => void }) {
     const [sessions, setSessions] = useState<ChatSession[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
@@ -46,7 +46,20 @@ export function ChatHistorySidebar() {
     }
 
     return (
-        <div className="w-64 bg-slate-800 border-r border-slate-700 flex flex-col h-full">
+        <div className={`
+            ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+            md:translate-x-0 fixed md:relative z-40 md:z-auto
+            w-64 bg-slate-800 border-r border-slate-700 flex flex-col h-full
+            transition-transform duration-300 ease-in-out
+        `}>
+            {onClose && (
+                <button
+                    onClick={onClose}
+                    className="md:hidden absolute right-[-40px] top-4 p-2 bg-slate-800 border border-slate-700 rounded-r-lg text-white"
+                >
+                    ✕
+                </button>
+            )}
             <div className="p-4">
                 <button
                     onClick={() => router.push('/workspace')}

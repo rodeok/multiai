@@ -67,9 +67,9 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex">
-      {/* Left Side - Hero */}
-      <div className="flex-1 flex flex-col justify-center items-start p-12 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex flex-col lg:flex-row">
+      {/* Left Side - Hero (Hidden on mobile) */}
+      <div className="hidden lg:flex flex-1 flex-col justify-center items-start p-12 text-white">
         <div className="max-w-lg">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
@@ -87,7 +87,7 @@ export default function SignIn() {
           </h1>
 
           <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-            Access GPT-4, Claude 3.5, and Llama 3 in one unified workspace. 
+            Access GPT-4, Claude 3.5, and Llama 3 in one unified workspace.
             Compare responses side-by-side and optimize your workflow.
           </p>
 
@@ -114,27 +114,37 @@ export default function SignIn() {
         </div>
       </div>
 
+      {/* Mobile Branding (Only visible on small screens) */}
+      <div className="lg:hidden p-8 pb-0 text-white text-center">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+            <div className="w-4 h-4 bg-white rounded-sm"></div>
+          </div>
+          <span className="text-xl font-bold">MultiModel AI</span>
+        </div>
+        <h1 className="text-3xl font-bold mb-2">Master Every Model.</h1>
+        <p className="text-gray-400 text-sm">Unified intelligence at your fingertips.</p>
+      </div>
+
       {/* Right Side - Auth Form */}
-      <div className="w-96 bg-slate-800/50 backdrop-blur-xl border-l border-slate-700 flex flex-col justify-center p-8">
+      <div className="w-full lg:w-96 bg-slate-800/50 backdrop-blur-xl border-t lg:border-t-0 lg:border-l border-slate-700 flex flex-col justify-center p-8 mt-8 lg:mt-0">
         <div className="mb-8">
           <div className="flex gap-1 mb-6">
             <button
               onClick={() => setIsLogin(true)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                isLogin 
-                  ? 'bg-blue-500 text-white' 
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${isLogin
+                  ? 'bg-blue-500 text-white'
                   : 'text-gray-400 hover:text-white'
-              }`}
+                }`}
             >
               Login
             </button>
             <button
               onClick={() => setIsLogin(false)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                !isLogin 
-                  ? 'bg-blue-500 text-white' 
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${!isLogin
+                  ? 'bg-blue-500 text-white'
                   : 'text-gray-400 hover:text-white'
-              }`}
+                }`}
             >
               Sign Up
             </button>
@@ -183,7 +193,7 @@ export default function SignIn() {
               />
             </div>
           )}
-          
+
           <div>
             <label className="block text-sm font-medium text-white mb-2">
               Email Address
@@ -197,7 +207,7 @@ export default function SignIn() {
               required
             />
           </div>
-          
+
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-sm font-medium text-white">

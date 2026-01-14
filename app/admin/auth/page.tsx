@@ -55,11 +55,11 @@ export default function AdminAuth() {
             </div>
             <span className="text-xl font-bold text-white">Multi-Model AI Admin</span>
           </div>
-          
-          <div className="flex items-center gap-6 text-gray-300">
-            <button className="hover:text-white transition-colors">System Status</button>
-            <button className="hover:text-white transition-colors">Security Policy</button>
-            <button className="hover:text-white transition-colors">Contact Support</button>
+
+          <div className="hidden sm:flex items-center gap-6 text-gray-300 text-sm">
+            <button className="hover:text-white transition-colors">Status</button>
+            <button className="hover:text-white transition-colors">Security</button>
+            <button className="hover:text-white transition-colors">Support</button>
           </div>
         </div>
       </header>
