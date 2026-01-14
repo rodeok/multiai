@@ -6,6 +6,7 @@ import clientPromise from './mongodb';
 import bcrypt from 'bcryptjs';
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -23,28 +24,33 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          throw new Error('Email and password are required');
         }
 
-        const client = await clientPromise;
-        const users = client.db().collection('users');
-        const user = await users.findOne({ email: credentials.email });
+        try {
+          const client = await clientPromise;
+          const users = client.db().collection('users');
+          const user = await users.findOne({ email: credentials.email });
 
-        if (!user) {
-          return null;
+          if (!user) {
+            throw new Error('No user found with this email');
+          }
+
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+
+          if (!isValid) {
+            throw new Error('Invalid password');
+          }
+
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+          };
+        } catch (error: any) {
+          console.error('Auth error in authorize callback:', error);
+          throw new Error(error.message || 'Authentication failed');
         }
-
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-
-        if (!isValid) {
-          return null;
-        }
-
-        return {
-          id: user._id.toString(),
-          email: user.email,
-          name: user.name,
-        };
       },
     }),
     CredentialsProvider({
@@ -83,14 +89,14 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.sub as string;
-        session.user.role = token.role;
+        (session.user as any).id = token.sub;
+        (session.user as any).role = token.role;
       }
       return session;
     },
