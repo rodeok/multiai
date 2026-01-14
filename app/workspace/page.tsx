@@ -55,9 +55,14 @@ export default function Workspace() {
   });
 
   const toggleModelSelection = (modelId: string) => {
+    const model = models.find(m => m.id === modelId);
+    if (model?.status === 'inactive') return;
+
     setSelectedModels(prev => {
       if (prev.includes(modelId)) {
         return prev.filter(id => id !== modelId);
+      } else if (prev.length < 2) { // Allow starting compare with 2, but up to 3
+        return [...prev, modelId];
       } else if (prev.length < 3) {
         return [...prev, modelId];
       }
@@ -176,59 +181,72 @@ export default function Workspace() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-24">
           {filteredModels.map(model => {
             const isSelected = selectedModels.includes(model.id);
-            const canSelect = selectedModels.length < 3 || isSelected;
+            const isInactive = model.status === 'inactive';
+            const canSelect = !isInactive && (selectedModels.length < 3 || isSelected);
 
             return (
               <div
                 key={model.id}
                 onClick={() => canSelect && toggleModelSelection(model.id)}
-                className={`relative p-6 rounded-lg border-2 transition-all cursor-pointer ${isSelected
+                className={`relative p-6 rounded-lg border-2 transition-all group ${isSelected
                   ? 'border-blue-500 bg-blue-500/10'
-                  : canSelect
-                    ? 'border-slate-600 bg-slate-800 hover:border-slate-500 hover:bg-slate-700/50'
-                    : 'border-slate-700 bg-slate-800/50 opacity-50 cursor-not-allowed'
+                  : isInactive
+                    ? 'border-slate-800 bg-slate-900/50 opacity-60 cursor-not-allowed'
+                    : canSelect
+                      ? 'border-slate-600 bg-slate-800 hover:border-slate-500 hover:bg-slate-700/50 cursor-pointer shadow-lg hover:shadow-blue-500/5'
+                      : 'border-slate-700 bg-slate-800/50 opacity-50 cursor-not-allowed'
                   }`}
               >
                 {isSelected && (
-                  <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                  <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center z-10">
                     <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                 )}
 
+                {isInactive && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="px-2 py-1 bg-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest rounded border border-red-500/30">
+                      Disabled
+                    </span>
+                  </div>
+                )}
+
                 <div className="mb-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className={`w-10 h-10 ${getProviderColor(model.provider)} rounded-lg flex items-center justify-center text-white text-lg`}>
+                    <div className={`w-10 h-10 ${isInactive ? 'bg-slate-700 gray-icon' : getProviderColor(model.provider)} rounded-lg flex items-center justify-center text-white text-lg transition-transform group-hover:scale-110`}>
                       {getProviderIcon(model.provider)}
                     </div>
                     <div>
-                      <div className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                      <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
                         {model.provider}
                       </div>
-                      <div className="text-lg font-bold text-white">
+                      <div className={`text-lg font-bold ${isInactive ? 'text-gray-500' : 'text-white'}`}>
                         {model.displayName}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                <p className={`text-sm leading-relaxed mb-4 line-clamp-2 ${isInactive ? 'text-gray-600' : 'text-gray-300'}`}>
                   {model.description}
                 </p>
 
                 <div className="flex flex-wrap gap-2">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${model.speed === 'Fast' ? 'bg-green-500/20 text-green-400' :
-                    model.speed === 'Express' ? 'bg-orange-500/20 text-orange-400' :
-                      model.speed === 'Balanced' ? 'bg-blue-500/20 text-blue-400' :
-                        model.speed === 'Advanced' ? 'bg-purple-500/20 text-purple-400' :
-                          'bg-gray-500/20 text-gray-400'
+                  <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter ${isInactive ? 'bg-slate-800 text-gray-600' :
+                    model.speed === 'Fast' ? 'bg-green-500/20 text-green-400' :
+                      model.speed === 'Express' ? 'bg-orange-500/20 text-orange-400' :
+                        model.speed === 'Balanced' ? 'bg-blue-500/20 text-blue-400' :
+                          model.speed === 'Advanced' ? 'bg-purple-500/20 text-purple-400' :
+                            'bg-gray-500/20 text-gray-400'
                     }`}>
                     ⚡ {model.speed}
                   </span>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${model.pricing === 'Premium' ? 'bg-yellow-500/20 text-yellow-400' :
-                    model.pricing === 'Cost-Effective' ? 'bg-green-500/20 text-green-400' :
-                      'bg-blue-500/20 text-blue-400'
+                  <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter ${isInactive ? 'bg-slate-800 text-gray-600' :
+                    model.pricing === 'Premium' ? 'bg-yellow-500/20 text-yellow-400' :
+                      model.pricing === 'Cost-Effective' ? 'bg-green-500/20 text-green-400' :
+                        'bg-blue-500/20 text-blue-400'
                     }`}>
                     💎 {model.pricing}
                   </span>

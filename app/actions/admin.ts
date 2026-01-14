@@ -180,7 +180,7 @@ export async function getActiveModels() {
         const client = await clientPromise;
         const db = client.db();
 
-        const models = await db.collection('models').find({ status: 'active' }).toArray();
+        const models = await db.collection('models').find({}).toArray();
 
         return models.map(model => ({
             ...model,

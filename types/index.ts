@@ -15,6 +15,7 @@ export interface AIModel {
   speed: 'Fast' | 'Express' | 'Balanced' | 'Advanced' | 'Low Latency';
   pricing: 'Premium' | 'Cost-Effective' | 'Open Source';
   features: string[];
+  status?: 'active' | 'inactive' | 'maintenance';
 }
 
 export interface ChatMessage {

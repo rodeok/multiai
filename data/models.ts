@@ -11,6 +11,7 @@ export const availableModels: AIModel[] = [
     speed: 'Fast',
     pricing: 'Premium',
     features: ['Multimodal', 'Creative', 'Reasoning'],
+    status: 'active',
   },
   {
     id: 'claude-3-5-sonnet',
@@ -22,6 +23,7 @@ export const availableModels: AIModel[] = [
     speed: 'Express',
     pricing: 'Premium',
     features: ['Reasoning', 'Coding', 'Analysis'],
+    status: 'active',
   },
   {
     id: 'gemini-1-5-pro',
@@ -33,6 +35,7 @@ export const availableModels: AIModel[] = [
     speed: 'Advanced',
     pricing: 'Premium',
     features: ['Multimodal', 'Long Context', 'Video Analysis'],
+    status: 'active',
   },
   {
     id: 'llama-3-1-405b',
@@ -44,6 +47,7 @@ export const availableModels: AIModel[] = [
     speed: 'Balanced',
     pricing: 'Open Source',
     features: ['Open Source', 'Reasoning', 'Customizable'],
+    status: 'active',
   },
   {
     id: 'mistral-large-2',
@@ -55,6 +59,7 @@ export const availableModels: AIModel[] = [
     speed: 'Balanced',
     pricing: 'Premium',
     features: ['Multilingual', 'Enterprise', 'European'],
+    status: 'active',
   },
   {
     id: 'gpt-4-turbo',
@@ -66,6 +71,7 @@ export const availableModels: AIModel[] = [
     speed: 'Low Latency',
     pricing: 'Premium',
     features: ['Vision', 'Speed', 'Advanced'],
+    status: 'active',
   },
   {
     id: 'claude-3-opus',
@@ -77,6 +83,7 @@ export const availableModels: AIModel[] = [
     speed: 'Balanced',
     pricing: 'Premium',
     features: ['Creative Writing', 'Deep Reasoning', 'Quality'],
+    status: 'active',
   },
   {
     id: 'gemini-1-5-flash',
@@ -88,5 +95,6 @@ export const availableModels: AIModel[] = [
     speed: 'Fast',
     pricing: 'Cost-Effective',
     features: ['Speed', 'Efficiency', 'High Volume'],
+    status: 'active',
   },
 ];
