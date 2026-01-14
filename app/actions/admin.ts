@@ -203,15 +203,15 @@ export async function getSystemSettings() {
         if (!settings) {
             // Return default settings if none exist
             return {
-                siteName: 'NexusChat',
-                supportEmail: 'support@nexuschat.ai',
+                siteName: 'Multiai',
+                supportEmail: 'support@Multiai.ai',
                 maintenanceMode: false,
                 registrationEnabled: true,
                 sessionDuration: 24,
                 maxLoginAttempts: 5,
                 defaultModel: 'GPT-4 Turbo',
                 temperature: 0.7,
-                systemPrompt: 'You are NexusChat, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
+                systemPrompt: 'You are Multiai, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
             };
         }
 
@@ -221,15 +221,15 @@ export async function getSystemSettings() {
         console.error('Failed to fetch system settings:', error);
         // Fallback to defaults if DB connection fails (e.g. during build)
         return {
-            siteName: 'NexusChat',
-            supportEmail: 'support@nexuschat.ai',
+            siteName: 'Multiai',
+            supportEmail: 'support@Multiai.ai',
             maintenanceMode: false,
             registrationEnabled: true,
             sessionDuration: 24,
             maxLoginAttempts: 5,
             defaultModel: 'GPT-4 Turbo',
             temperature: 0.7,
-            systemPrompt: 'You are NexusChat, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
+            systemPrompt: 'You are Multiai, a highly intelligent and helpful AI assistant designed to provide accurate, relevant, and engaging information to users...'
         };
     }
 }

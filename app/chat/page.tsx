@@ -204,7 +204,7 @@ export default function Chat() {
               <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center flex-shrink-0">
                 <div className="w-4 h-4 bg-white rounded-sm"></div>
               </div>
-              <span className="text-lg sm:text-xl font-bold text-white whitespace-nowrap hidden sm:inline">NexusChat</span>
+              <span className="text-lg sm:text-xl font-bold text-white whitespace-nowrap hidden sm:inline">Multiai</span>
             </div>
 
             <button
