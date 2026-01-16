@@ -4,6 +4,9 @@ export interface User {
   name?: string;
   image?: string;
   subscription?: 'free' | 'pro';
+  subscriptionStartDate?: Date;
+  subscriptionEndDate?: Date;
+  role?: 'user' | 'admin';
 }
 
 export interface AIModel {

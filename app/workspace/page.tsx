@@ -65,7 +65,7 @@ export default function Workspace() {
   });
 
   const userSubscription = (session?.user as any)?.subscription || 'free';
-  const modelLimit = userSubscription === 'pro' ? 5 : 3;
+  const modelLimit = userSubscription === 'pro' ? 10 : 5;
 
   const toggleModelSelection = (modelId: string) => {
     const model = models.find(m => m.id === modelId);
@@ -173,7 +173,7 @@ export default function Workspace() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Configure Workspace</h1>
             <p className="text-gray-400 text-base sm:text-lg">
-              Select {userSubscription === 'pro' ? 'up to 5' : 'up to 3'} models to compare responses in real-time.
+              Select {userSubscription === 'pro' ? 'up to 10' : 'up to 5'} models to compare responses in real-time.
             </p>
           </div>
           {userSubscription === 'free' && (
@@ -181,7 +181,7 @@ export default function Workspace() {
               onClick={() => router.push('/upgrade')}
               className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-bold text-sm shadow-lg shadow-amber-500/20 hover:scale-105 transition-transform"
             >
-              Upgrade to Pro (5 Models)
+              Upgrade to Pro (10 Models)
             </button>
           )}
         </div>

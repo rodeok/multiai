@@ -18,15 +18,25 @@ export async function POST(req: NextRequest) {
         if (body.event === 'charge.success') {
             const { email } = body.data.customer;
 
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + 1);
+
             const client = await clientPromise;
             const users = client.db().collection('users');
 
             await users.updateOne(
                 { email },
-                { $set: { subscription: 'pro' } }
+                {
+                    $set: {
+                        subscription: 'pro',
+                        subscriptionStartDate: startDate,
+                        subscriptionEndDate: endDate
+                    }
+                }
             );
 
-            console.log(`User ${email} upgraded to Pro`);
+            console.log(`User ${email} upgraded to Pro until ${endDate.toISOString()}`);
         }
 
         return NextResponse.json({ status: 'success' });

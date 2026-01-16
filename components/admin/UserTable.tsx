@@ -62,6 +62,7 @@ export function UserTable({ users }: UserTableProps) {
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14 pl-8">User Profile</TableHead>
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Email Address</TableHead>
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Plan</TableHead>
+                            <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Expires</TableHead>
                             <TableHead className="text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14">Status</TableHead>
                             <TableHead className="text-right text-slate-500 font-bold text-[10px] uppercase tracking-widest h-14 pr-8">Actions</TableHead>
                         </TableRow>
@@ -90,6 +91,11 @@ export function UserTable({ users }: UserTableProps) {
                                         ? 'text-blue-400 bg-blue-400/10 border-blue-400/20'
                                         : 'text-slate-400 bg-slate-400/10 border-slate-400/20'}`}>
                                         {user.subscription?.toUpperCase() || 'FREE'}
+                                    </span>
+                                </TableCell>
+                                <TableCell>
+                                    <span className="text-[10px] text-slate-500 font-medium">
+                                        {user.subscriptionEndDate ? new Date(user.subscriptionEndDate).toLocaleDateString() : 'N/A'}
                                     </span>
                                 </TableCell>
                                 <TableCell>

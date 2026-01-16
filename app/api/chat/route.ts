@@ -30,6 +30,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const userSubscription = (session?.user as any)?.subscription || 'free';
+    const modelLimit = userSubscription === 'pro' ? 10 : 5;
+
+    if (modelIds.length > modelLimit) {
+      return NextResponse.json(
+        { error: `Free users can use up to 5 models. Pro users can use up to 10. Please upgrade or reduce your selection.` },
+        { status: 403 }
+      );
+    }
+
     const client = await clientPromise;
     const db = client.db();
     const modelsCollection = db.collection('models');
